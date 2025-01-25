@@ -81,7 +81,7 @@ h1 {
   background-color: whitesmoke;
   cursor: pointer;
   font-family: inherit;
-  box-shadow: 2px 3px 5px #dfdfdf;
+  box-shadow: 2px 2px 5px #dfdfdf;
   transition: 0.2s ease-out;
 }
 
@@ -121,23 +121,26 @@ h1 {
   color: black;
   padding: 12px;
   color: white;
-  background-color: #b00020;
+  background-color: #18aa0b;
   border-radius: 5px;
   text-decoration: none;
-  box-shadow: 2px 2px 5px gray;
+  box-shadow: 2px 2px 6px #18aa0b77;
   font-style: normal;
   cursor: pointer;
   letter-spacing: 1px;
   font-family: inherit;
-  border: 1px solid #b00020;
-  transition: 0.3s ease-out;
+  border: 1px solid #18aa0b;
+  transition: 0.2s ease-out;
 }
 
 #download-btn:hover {
-  color: black;
+  color: #18aa0b;
   background-color: white;
-  border: 1px solid lightgray;
-  transform: scale(1.1);
+  border: 1px solid #18aa0b;
+}
+
+.success p {
+  margin: 20px auto;
 }
 
 @media (max-width: 768px) {

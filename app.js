@@ -1,18 +1,16 @@
-// Required packages
 import express from "express";
 import fetch from "node-fetch";
+import dotenv from "dotenv";
 
-// Create express server
+dotenv.config();
+
 const app = express();
 
-// Indicate the port number server will run on
 const PORT = process.env.PORT || 3000;
 
-// Set template engine
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 
-// Needed to parse html data for POST requests
 app.use(
   express.urlencoded({
     extended: true,
@@ -20,28 +18,16 @@ app.use(
 );
 app.use(express.json());
 
-// GET route
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-// POST route
 app.post("/convert-mp3", async (req, res) => {
   const url = req.body.videoId.trim();
 
-  // Regular expression to extract the "v" parameter from the YouTube URL
   const match = url.match(/[?&]v=([^&#]*)/);
 
   let videoId = match[1];
-  console.log(videoId);
-
-  //   if (match && match[1]) {
-  //     videoId = `v=${match[1]}`; // Set the extracted video ID in the input field
-  //   } else {
-  //     alert("Please enter a valid YouTube URL");
-  //     return false; // Prevent form submission if the URL is invalid
-  //   }
-  // }
 
   if (videoId === undefined || videoId === "" || videoId === null) {
     return res.render("index", {
@@ -76,7 +62,6 @@ app.post("/convert-mp3", async (req, res) => {
   }
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
