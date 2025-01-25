@@ -4,24 +4,35 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit&display=swap"
+      rel="stylesheet"
+    />
     <title>Abstract MP3 audio from Youtube clip</title>
   </head>
 
   <body>
     <div class="top-container">
-      <form action="/convert-mp3" method="POST" id="form">
-        <h1>YouTube 2 MP3 Converter</h1>
-        <h4>Enter the video ID</h4>
-        <div>
-          <input type="text" name="videoId" placeholder="Video ID..." /><button
-            id="submit-btn"
-          >
-            Convert
-          </button>
-        </div>
-      </form>
+      <h1>YouTube 2 MP3 Converter</h1>
     </div>
+
+    <form action="/convert-mp3" method="POST" id="form">
+      <p>Enter the Youtube URL</p>
+      <div>
+        <input
+          type="text"
+          name="videoId"
+          placeholder="ex. https://www.youtube.com/watch?v=...."
+        /><button id="submit-btn">Convert</button>
+      </div>
+    </form>
 
     <div class="bottom-container">
       <% if (typeof success != "undefined" && success) { %>

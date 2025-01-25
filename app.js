@@ -1,10 +1,6 @@
 // Required packages
-const express = require("express");
-// npm install node-fetch@2
-const fetch = require("node-fetch");
-const request = require("request");
-
-require("dotenv").config();
+import express from "express";
+import fetch from "node-fetch";
 
 // Create express server
 const app = express();
@@ -31,7 +27,21 @@ app.get("/", (req, res) => {
 
 // POST route
 app.post("/convert-mp3", async (req, res) => {
-  const videoId = req.body.videoId;
+  const url = req.body.videoId.trim();
+
+  // Regular expression to extract the "v" parameter from the YouTube URL
+  const match = url.match(/[?&]v=([^&#]*)/);
+
+  let videoId = match[1];
+  console.log(videoId);
+
+  //   if (match && match[1]) {
+  //     videoId = `v=${match[1]}`; // Set the extracted video ID in the input field
+  //   } else {
+  //     alert("Please enter a valid YouTube URL");
+  //     return false; // Prevent form submission if the URL is invalid
+  //   }
+  // }
 
   if (videoId === undefined || videoId === "" || videoId === null) {
     return res.render("index", {

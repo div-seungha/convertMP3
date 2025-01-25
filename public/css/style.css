@@ -1,55 +1,79 @@
 * {
   padding: 0;
   margin: 0;
+  font-size: 16px;
 }
 
 body {
-  color: white;
   overflow: hidden;
-  font-family: "Orbitron", sans-serif;
+  font-family: "Outfit", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .top-container {
-  height: 40vh;
-  background-color: red;
+  height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #6200e8;
 }
 
 .bottom-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
   padding-top: 30px;
 }
 
 #form {
-  width: 600px;
-  height: 40vh;
-  margin: auto;
+  width: 60%;
+  margin: 40px auto;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
   gap: 10px;
-  padding-top: 20px;
 }
 
-#form h1 {
-  font-style: italic;
-  text-shadow: 1px 1px darkgray;
+h1 {
+  font-size: 2rem;
+  color: #fff;
+  font-family: "Outfit", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+#form > div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#form > div > p {
+  margin: 20px 0;
 }
 
 #form input {
-  width: 300px;
+  width: 60%;
   padding: 14px;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
   border: 1px solid lightgray;
   font-family: inherit;
   outline: none;
-  box-shadow: 2px 2px 5px gray;
+  box-shadow: 2px 2px 5px #dfdfdf;
 }
 
 #form button {
+  width: 20%;
   padding: 14px;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -57,15 +81,15 @@ body {
   background-color: whitesmoke;
   cursor: pointer;
   font-family: inherit;
-  box-shadow: 2px 3px 5px gray;
-  transition: 0.3s ease-out;
+  box-shadow: 2px 3px 5px #dfdfdf;
+  transition: 0.2s ease-out;
 }
 
 #form button:hover {
   color: white;
-  background-color: red;
-  border: 1px solid red;
-  transform: scale(1.1);
+  background-color: #6200e8;
+  border: 1px solid #6200e8;
+  box-shadow: 2px 3px 5px #b892f2;
 }
 
 .errors {
@@ -78,9 +102,9 @@ body {
   gap: 10px;
   border-radius: 5px;
   padding: 12px;
-  color: red;
+  color: #b00020;
   background-color: #ffe6e6;
-  border: 1px solid red;
+  border: 1px solid #b00020;
 }
 
 .success {
@@ -97,7 +121,7 @@ body {
   color: black;
   padding: 12px;
   color: white;
-  background-color: red;
+  background-color: #b00020;
   border-radius: 5px;
   text-decoration: none;
   box-shadow: 2px 2px 5px gray;
@@ -105,7 +129,7 @@ body {
   cursor: pointer;
   letter-spacing: 1px;
   font-family: inherit;
-  border: 1px solid red;
+  border: 1px solid #b00020;
   transition: 0.3s ease-out;
 }
 
