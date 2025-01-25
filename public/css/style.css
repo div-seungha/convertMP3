@@ -2,11 +2,12 @@
   padding: 0;
   margin: 0;
   font-size: 16px;
+  color: #1e2130;
 }
 
 body {
   overflow: hidden;
-  font-family: "Outfit", serif;
+  font-family: "Poppins", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -18,7 +19,7 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  background-color: #6200e8;
+  background-color: #ededed;
 }
 
 .bottom-container {
@@ -41,11 +42,11 @@ body {
 
 h1 {
   font-size: 2rem;
-  color: #fff;
-  font-family: "Outfit", serif;
+  font-family: "Poppins", serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
+  padding: 20px;
 }
 
 #form > div {
@@ -119,7 +120,7 @@ h1 {
 #download-btn {
   width: fit-content;
   color: black;
-  padding: 12px;
+  padding: 12px 24px;
   color: white;
   background-color: #18aa0b;
   border-radius: 5px;
@@ -144,9 +145,17 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  * {
+    font-size: 0.9rem;
+  }
+
   .bottom-container {
     width: 90%;
     margin: auto;
+  }
+
+  h1 {
+    font-size: 1.2rem;
   }
 
   #form,
