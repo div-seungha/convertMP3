@@ -1,18 +1,45 @@
 {
   "name": "youtubetomp3",
   "version": "1.0.0",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "dev": "node ./server.js",
+    "start": "cross-env NODE_ENV=production node ./server.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "@distube/ytdl-core": "^4.16.4",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@remix-run/express": "^2.15.2",
+    "@remix-run/node": "^2.15.2",
+    "@remix-run/react": "^2.15.2",
+    "@remix-run/serve": "^2.15.2",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fluent-ffmpeg": "^2.1.3",
+    "isbot": "4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "readline": "^1.3.0",
+    "typescript": "^5.7.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "@remix-run/dev": "^2.15.2",
+    "@types/express": "^5.0.0",
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "nodemon": "^3.1.9",
+    "vite": "^6.0.11"
+  },
+  "private": true,
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
