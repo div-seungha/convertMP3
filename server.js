@@ -50,10 +50,9 @@ app.post("/download-mp3", async (req, res) => {
     res.setHeader("Content-Type", "video/mp4");
 
     const stream = ytdl(url, {
-      filter: (format) => format.container === "mp4",
+      filter: (format) =>
+        format.container === "mp4" && format.hasAudio && !format.hasVideo,
     });
-
-    // TODO: 영상에서 audio만 추출하는 코드 추가해야 함
 
     stream.pipe(res);
   } catch (error) {
