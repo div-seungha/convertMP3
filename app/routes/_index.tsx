@@ -1,5 +1,7 @@
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import Background from "../components/Background";
+import { download_button, input, input_box } from "../components/styles.css";
 
 export default function Index() {
   const [url, setUrl] = useState("");
@@ -59,17 +61,20 @@ export default function Index() {
 
   return (
     <div>
-      {/* <form action="/download-mp3" method="post"> */}
-      <input
-        type="text"
-        placeholder="YouTube URL"
-        name="url"
-        value={url}
-        onChange={({ target }) => setUrl(target.value)}
-        className="border p-2"
-      />
-      <button onClick={handleDownload}>MP3 다운로드</button>
-      {/* </form> */}
+      <Background />
+      <div className={input_box}>
+        <input
+          className={input}
+          type="text"
+          placeholder="YouTube URL"
+          name="url"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+        />
+        <button className={download_button} onClick={handleDownload}>
+          Download
+        </button>
+      </div>
     </div>
   );
 }

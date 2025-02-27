@@ -8,11 +8,8 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <h1>Hello world!</h1>
-
+      <body style={{ margin: 0, padding: 0, position: "relative" }}>
         <Outlet />
-
         <Scripts />
       </body>
     </html>
