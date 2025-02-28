@@ -138,4 +138,5 @@ export const footer = style({
   backdropFilter: "blur(20px)",
   fontFamily: wantedSans,
   color: "#ffffff99",
+  zIndex: 100,
 });

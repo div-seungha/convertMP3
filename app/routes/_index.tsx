@@ -70,11 +70,11 @@ export default function Index() {
   };
 
   return (
-    <div>
+    <>
       <Background />
-      <main>
-        <div className={container}>
-          <Title />
+      <div className={container}>
+        <Title />
+        <main>
           <div className={input_box}>
             <input
               className={input}
@@ -126,9 +126,9 @@ export default function Index() {
             조속히 해당 문제를 고치도록 노력하겠습니다.🫡
             <br />
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
       <footer className={footer}>&copy; 2025 Designed by Seungha Kim.</footer>
-    </div>
+    </>
   );
 }
