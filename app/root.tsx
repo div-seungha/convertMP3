@@ -34,6 +34,18 @@ export default function App() {
   return (
     <html>
       <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-89XDGJW42G"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-89XDGJW42G');`,
+          }}
+        />
         <link rel="icon" href="data:image/x-icon;base64,AA" />
         <Meta />
         <Links />
