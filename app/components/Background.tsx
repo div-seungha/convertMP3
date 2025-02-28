@@ -1,17 +1,7 @@
-import { background, box_container, hover_box } from "./styles.css";
-import Title from "./Title";
+import { background } from "./styles.css";
 
 const Background = () => {
-  return (
-    <div className={background}>
-      <Title />
-      {/* <div className={box_container}>
-        {Array.from({ length: 100 }).map((v, i) => {
-          return <div className={hover_box} key={i}></div>;
-        })}
-      </div> */}
-    </div>
-  );
+  return <div className={background}></div>;
 };
 
 export default Background;

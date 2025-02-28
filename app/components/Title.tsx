@@ -1,9 +1,8 @@
-const Title = ({ color = "#16343F" }) => {
+const Title = ({ color = "#1E2325" }) => {
   return (
-    <div
+    <header
       style={{
         width: "100%",
-        marginTop: 100,
         display: "flex",
         justifyContent: "center",
       }}
@@ -101,7 +100,7 @@ const Title = ({ color = "#16343F" }) => {
           fill={color}
         />
       </svg>
-    </div>
+    </header>
   );
 };
 
