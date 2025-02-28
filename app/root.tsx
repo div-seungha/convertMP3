@@ -37,6 +37,11 @@ export default function App() {
         <link rel="icon" href="data:image/x-icon;base64,AA" />
         <Meta />
         <Links />
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "5218bdafd7b847e5b591e359a536842f"}'
+        ></script>
       </head>
       <body style={{ margin: 0, padding: 0, position: "relative" }}>
         <Outlet />
