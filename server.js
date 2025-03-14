@@ -3,10 +3,8 @@ import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import express from "express";
 import fs from "fs";
-import ytdl from "@distube/ytdl-core";
-import ffmpeg from "fluent-ffmpeg";
-import ffmpegPath from "@ffmpeg-installer/ffmpeg";
-import { PassThrough } from "stream";
+import { spawn } from "child_process";
+import path from "path";
 
 installGlobals();
 
@@ -40,38 +38,65 @@ app.use(express.json());
 app.post("/download-mp3", async (req, res) => {
   try {
     const url = req.body.url;
-
-    if (!ytdl.validateURL(url)) {
+    if (!url || (!url.includes("youtube.com") && !url.includes("youtu.be"))) {
       return res.status(400).json({ error: "Invalid YouTube URL" });
     }
 
-    const info = await ytdl.getInfo(url);
-    const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
+    // yt-dlp를 실행하여 제목을 가져옴
+    const titleProcess = spawn("yt-dlp", ["--get-title", url]);
 
-    res.setHeader("Content-Disposition", `attachment; filename="${title}.mp3"`);
-    res.setHeader("Content-Type", "audio/mpeg");
-
-    const options = {
-      requestOptions: {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-          "Accept-Language": "en-US,en;q=0.9",
-          cookie: process.env.COOKIE,
-        },
-      },
-    };
-
-    const stream = ytdl(url, options, {
-      filter: (format) =>
-        format.container === "mp4" && format.hasAudio && !format.hasVideo,
+    let title = "";
+    titleProcess.stdout.on("data", (data) => {
+      title += data.toString().trim();
     });
 
-    const ffmpegStream = new PassThrough();
+    titleProcess.on("close", (code) => {
+      if (code !== 0) {
+        return res.status(500).json({ error: "Failed to fetch video title" });
+      }
 
-    ffmpeg(stream).audioCodec("libmp3lame").format("mp3").pipe(ffmpegStream);
+      // 파일명에서 특수 문자 제거 (파일 시스템 문제 방지)
+      const sanitizedTitle = title
+        .replace(/[^\w\s]/gi, "")
+        .replace(/\s+/g, "_");
+      const filename = `${sanitizedTitle}.mp3`;
+      const outputPath = path.join("/tmp", filename);
 
-    ffmpegStream.pipe(res);
+      // yt-dlp로 MP3 다운로드
+      const process = spawn("yt-dlp", [
+        "-x",
+        "--audio-format",
+        "mp3",
+        "-o",
+        outputPath,
+        url,
+      ]);
+
+      process.stderr.on("data", (data) => {
+        console.error(`stderr: ${data}`);
+      });
+
+      process.on("close", (code) => {
+        if (code !== 0) {
+          return res.status(500).json({ error: "Failed to download MP3" });
+        }
+
+        // 다운로드 완료 후 클라이언트에 스트리밍
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`
+        );
+        res.setHeader("Content-Type", "audio/mpeg");
+
+        const fileStream = fs.createReadStream(outputPath);
+        fileStream.pipe(res);
+
+        // 파일 전송이 끝나면 삭제
+        fileStream.on("end", () => {
+          fs.unlinkSync(outputPath);
+        });
+      });
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Failed to process request" });
