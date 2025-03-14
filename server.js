@@ -68,8 +68,6 @@ app.post("/download-mp3", async (req, res) => {
       const process = spawn("yt-dlp", [
         "--cookies",
         "/home/ubuntu/tomp3/youtube_cookies.txt",
-        "--cookies-from-browser",
-        "chrome",
         "--force-ipv4",
         "--extractor-args",
         "youtube:player_client=web",
