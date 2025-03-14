@@ -66,6 +66,8 @@ export default function Index() {
     } catch (error) {
       console.error("Download error:", error);
       alert("파일 다운로드 중 오류가 발생했습니다.");
+      setIsLoading(false);
+      throw error;
     }
   };
 
@@ -95,8 +97,11 @@ export default function Index() {
             </button>
           </div>
           <div className={description_box}>
-            유튜브 URL을 복사 & 붙여넣기하여 유튜브의 오디오를 파일로
-            추출해보세요.
+            <p style={{ fontSize: 12 }}>Ver 1.0.0</p>
+            <strong>
+              유튜브 URL을 복사 & 붙여넣기하여 유튜브의 오디오를 파일로
+              추출해보세요.
+            </strong>
             <br />
             <br />
             <del className={delete_txt}>
@@ -111,20 +116,6 @@ export default function Index() {
               검색엔진에 안 뜨게 할 테니 트래픽이 그렇게 과하진 않을 거라
               괜찮습니다.
             </del>
-            <br />
-            <br />
-            그런데 현재 <del className={delete_txt}>
-              개발자의 능력 부족으로
-            </del>{" "}
-            mp4 파일을 mp3으로 변환하는 기능을 넣지 못해
-            <br />
-            오디오 파일임에도 mp4 형식으로 추출되는 문제가 있고
-            <br />
-            또 뭐가 원인인진 모르겠지만 3~4분짜리 음원도 8~9분 길이로 추출되고
-            있는 문제가 있습니다.
-            <br />
-            조속히 해당 문제를 고치도록 노력하겠습니다.🫡
-            <br />
           </div>
         </main>
       </div>

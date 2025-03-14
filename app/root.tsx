@@ -1,4 +1,12 @@
-import { Links, Meta, MetaFunction, Outlet, Scripts } from "@remix-run/react";
+import { captureRemixErrorBoundaryError } from "@sentry/remix";
+import {
+  Links,
+  Meta,
+  MetaFunction,
+  Outlet,
+  Scripts,
+  useRouteError,
+} from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,10 +38,25 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+  captureRemixErrorBoundaryError(error);
+  return <div>Something went wrong</div>;
+};
+
 export default function App() {
   return (
     <html>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-THZGX4VX');`,
+          }}
+        />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-89XDGJW42G"
@@ -56,6 +79,15 @@ export default function App() {
         ></script>
       </head>
       <body style={{ margin: 0, padding: 0, position: "relative" }}>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-THZGX4VX"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+
         <Outlet />
         <Scripts />
       </body>

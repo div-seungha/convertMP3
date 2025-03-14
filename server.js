@@ -1,3 +1,4 @@
+import "./instrumentation.server.mjs";
 import { createRequestHandler } from "@remix-run/express";
 import { installGlobals } from "@remix-run/node";
 import express from "express";
@@ -5,6 +6,7 @@ import fs from "fs";
 import ytdl from "@distube/ytdl-core";
 import ffmpeg from "fluent-ffmpeg";
 import ffmpegPath from "@ffmpeg-installer/ffmpeg";
+import { PassThrough } from "stream";
 
 installGlobals();
 
@@ -46,15 +48,19 @@ app.post("/download-mp3", async (req, res) => {
     const info = await ytdl.getInfo(url);
     const title = info.videoDetails.title.replace(/[^\w\s]/gi, "");
 
-    res.setHeader("Content-Disposition", `attachment; filename="${title}.mp4"`);
-    res.setHeader("Content-Type", "video/mp4");
+    res.setHeader("Content-Disposition", `attachment; filename="${title}.mp3"`);
+    res.setHeader("Content-Type", "audio/mpeg");
 
     const stream = ytdl(url, {
       filter: (format) =>
         format.container === "mp4" && format.hasAudio && !format.hasVideo,
     });
 
-    stream.pipe(res);
+    const ffmpegStream = new PassThrough();
+
+    ffmpeg(stream).audioCodec("libmp3lame").format("mp3").pipe(ffmpegStream);
+
+    ffmpegStream.pipe(res);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Failed to process request" });

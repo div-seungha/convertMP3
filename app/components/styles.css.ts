@@ -13,7 +13,7 @@ export const font = style({
 export const background = style({
   width: "100%",
   height: "100vh",
-  background: "url(/assets/background.jpg)",
+  background: "linear-gradient(45deg, #1A4369, #255E93, #0B2B49)",
   backgroundSize: "cover",
   position: "absolute",
   top: 0,
@@ -28,7 +28,8 @@ export const box_container = style({
 });
 
 export const delete_txt = style({
-  opacity: 0.6,
+  opacity: 0.5,
+  fontSize: 12,
 });
 
 export const hover_box = style({
@@ -56,7 +57,7 @@ export const description_box = style({
   background: "#ffffff22",
   border: "1px solid #E0EFF333",
   padding: "40px 20px",
-  fontSize: 12,
+  fontSize: 16,
 });
 
 export const container = style({
