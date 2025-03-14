@@ -49,7 +49,7 @@ app.post("/download-mp3", async (req, res) => {
       "--referer",
       "https://www.youtube.com/",
       "--get-title",
-      videoUrl,
+      url,
     ]);
 
     let title = "";
