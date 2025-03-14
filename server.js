@@ -42,8 +42,15 @@ app.post("/download-mp3", async (req, res) => {
       return res.status(400).json({ error: "Invalid YouTube URL" });
     }
 
-    // yt-dlp를 실행하여 제목을 가져옴
-    const titleProcess = spawn("yt-dlp", ["--get-title", url]);
+    const titleProcess = spawn("yt-dlp", [
+      "--force-ipv4",
+      "--user-agent",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "--referer",
+      "https://www.youtube.com/",
+      "--get-title",
+      videoUrl,
+    ]);
 
     let title = "";
     titleProcess.stdout.on("data", (data) => {
@@ -52,17 +59,15 @@ app.post("/download-mp3", async (req, res) => {
 
     titleProcess.on("close", (code) => {
       if (code !== 0) {
-        return res.status(500).json({ error: "Failed to fetch video title" });
+        title = "audio";
       }
 
-      // 파일명에서 특수 문자 제거 (파일 시스템 문제 방지)
       const sanitizedTitle = title
         .replace(/[^\w\s]/gi, "")
         .replace(/\s+/g, "_");
       const filename = `${sanitizedTitle}.mp3`;
       const outputPath = path.join("/tmp", filename);
 
-      // yt-dlp로 MP3 다운로드
       const process = spawn("yt-dlp", [
         "-x",
         "--audio-format",
@@ -81,7 +86,6 @@ app.post("/download-mp3", async (req, res) => {
           return res.status(500).json({ error: "Failed to download MP3" });
         }
 
-        // 다운로드 완료 후 클라이언트에 스트리밍
         res.setHeader(
           "Content-Disposition",
           `attachment; filename="${filename}"`
