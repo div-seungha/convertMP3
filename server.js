@@ -51,7 +51,17 @@ app.post("/download-mp3", async (req, res) => {
     res.setHeader("Content-Disposition", `attachment; filename="${title}.mp3"`);
     res.setHeader("Content-Type", "audio/mpeg");
 
-    const stream = ytdl(url, {
+    const options = {
+      requestOptions: {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+          "Accept-Language": "en-US,en;q=0.9",
+        },
+      },
+    };
+
+    const stream = ytdl(url, options, {
       filter: (format) =>
         format.container === "mp4" && format.hasAudio && !format.hasVideo,
     });
