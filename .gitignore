@@ -7,3 +7,7 @@
 node_modules
 # Sentry Config File
 .env.sentry-build-plugin
+
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
