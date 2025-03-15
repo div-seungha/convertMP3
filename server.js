@@ -47,6 +47,8 @@ app.post("/download-mp3", async (req, res) => {
     const titleProcess = spawn("yt-dlp", [
       "--proxy",
       proxyUrl,
+      "--dns",
+      "1.1.1.1",
       "--get-title",
       url,
     ]);
@@ -70,6 +72,8 @@ app.post("/download-mp3", async (req, res) => {
       const process = spawn("yt-dlp", [
         "--proxy",
         proxyUrl,
+        "--dns",
+        "1.1.1.1",
         "-x",
         "--audio-format",
         "mp3",
