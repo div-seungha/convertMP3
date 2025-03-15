@@ -8,6 +8,8 @@ import path from "path";
 
 installGlobals();
 
+const proxyUrl = process.env.PROXY_URL;
+
 const viteDevServer =
   process.env.NODE_ENV === "production"
     ? undefined
@@ -43,13 +45,8 @@ app.post("/download-mp3", async (req, res) => {
     }
 
     const titleProcess = spawn("yt-dlp", [
-      "--cookies",
-      "/home/ubuntu/tomp3/youtube_cookies.txt",
-      "--user-agent",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-      "--force-ipv4",
-      "--extractor-args",
-      "youtube:player_client=web",
+      "--proxy",
+      proxyUrl,
       "--get-title",
       url,
     ]);
@@ -71,13 +68,8 @@ app.post("/download-mp3", async (req, res) => {
       const outputPath = path.join("/tmp", filename);
 
       const process = spawn("yt-dlp", [
-        "--cookies",
-        "/home/ubuntu/tomp3/youtube_cookies.txt",
-        "--user-agent",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "--force-ipv4",
-        "--extractor-args",
-        "youtube:player_client=web",
+        "--proxy",
+        proxyUrl,
         "-x",
         "--audio-format",
         "mp3",
