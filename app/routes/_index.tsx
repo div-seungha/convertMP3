@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Background from "../components/Background";
 import { AiOutlineLoading } from "react-icons/ai";
 import {
@@ -16,8 +16,13 @@ import Title from "../components/Title";
 export default function Index() {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const cookies = useRef("");
 
   const handleDownload = async () => {
+    if (!cookies.current) {
+      alert("앗, 무언가가 잘못되었습니다. 잠시 뒤에 다시 이용해주세요");
+      return;
+    }
     try {
       setIsLoading(true);
       const response = await fetch("/download-mp3", {
@@ -25,7 +30,7 @@ export default function Index() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, cookies: cookies.current }),
       });
 
       if (!response.ok) {
@@ -71,6 +76,12 @@ export default function Index() {
     }
   };
 
+  useEffect(() => {
+    if (document) {
+      cookies.current = document.cookie;
+    }
+  }, []);
+
   return (
     <>
       <Background />
@@ -79,14 +90,19 @@ export default function Index() {
         <main>
           <div className={input_box}>
             <input
+              // disabled
               className={input}
               type="text"
-              placeholder="Copy and Paste the YouTube URL"
+              placeholder="죄송합니다 지금 버그를 고치는 중이라 잠시 이용이 불가합니다..."
               name="url"
               value={url}
               onChange={({ target }) => setUrl(target.value)}
             />
-            <button className={download_button} onClick={handleDownload}>
+            <button
+              // disabled
+              className={download_button}
+              onClick={handleDownload}
+            >
               {isLoading ? (
                 <span className={loading}>
                   <AiOutlineLoading />

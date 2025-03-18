@@ -106,6 +106,9 @@ export const input = style({
   ":focus": {
     outline: "none",
   },
+  "::placeholder": {
+    color: "#0B2B49",
+  },
 });
 
 export const download_button = style({
@@ -125,6 +128,11 @@ export const download_button = style({
   ":hover": {
     background: "#1D6C89",
     border: "1px solid #1D6C89",
+  },
+  ":disabled": {
+    background: "#aaaaaa55",
+    color: "#ffffff55",
+    cursor: "not-allowed",
   },
   fontFamily: wantedSans,
 });
