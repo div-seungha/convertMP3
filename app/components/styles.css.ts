@@ -64,17 +64,23 @@ export const container = style({
   width: "80%",
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   borderRadius: 20,
   backdropFilter: "blur(18px)",
   background: "#ffffff33",
   border: "1px solid #E0EFF355",
-  padding: "60px 40px 100px",
+  // padding: "60px 40px 100px",
+  padding: 100,
   position: "absolute",
   top: 200,
   left: "50%",
   transform: "translateX(-50%)",
   fontFamily: wantedSans,
   maxWidth: 1000,
+});
+
+export const click_link = style({
+  color: "#fff",
 });
 
 const spin = keyframes({
