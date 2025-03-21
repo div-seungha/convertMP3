@@ -21,7 +21,7 @@ export default function Index() {
       <div className={container}>
         <a
           className={click_link}
-          href="https://beonanotherplanet.com/Tiskofy_1.0.0-beta.1_aarch64.dmg"
+          href="https://beonanotherplanet.com/Tiskofy.zip"
           target="_blank"
         >
           Download (MacOS)
