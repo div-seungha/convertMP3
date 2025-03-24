@@ -48,5 +48,5 @@ jobs:
             docker rm -f to_mp3_container || true
 
             echo "===> Running new container..."
-            docker run -d --name to_mp3_container -p 80:80 to_mp3
+            docker run -d --name to_mp3_container -p 80:3000 to_mp3
           EOF
