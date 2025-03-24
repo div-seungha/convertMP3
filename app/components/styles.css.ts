@@ -2,18 +2,79 @@ import { globalFontFace, style, keyframes } from "@vanilla-extract/css";
 
 const wantedSans = "wantedSans";
 
-globalFontFace(wantedSans, {
-  src: "url(/fonts/WantedSansStd-Regular.woff2)",
-});
+globalFontFace(wantedSans, [
+  {
+    src: "url(/fonts/WantedSansStd-Regular.woff2)",
+    fontWeight: 400,
+    fontDisplay: "block",
+  },
+  {
+    src: "url(/fonts/WantedSansStd-SemiBold.woff2)",
+    fontWeight: 600,
+    fontDisplay: "block",
+  },
+  {
+    src: "url(/fonts/WantedSansStd-Bold.woff2)",
+    fontWeight: 700,
+    fontDisplay: "block",
+  },
+  {
+    src: "url(/fonts/WantedSansStd-Black.woff2)",
+    fontWeight: 900,
+    fontDisplay: "block",
+  },
+]);
 
 export const font = style({
   fontFamily: wantedSans,
 });
 
+const responsive = style({
+  "@media": {
+    "screen and (max-width: 1000px)": {
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+});
+
+export const plain_text = style({
+  fontFamily: wantedSans,
+  color: "#111D27aa",
+  fontWeight: 400,
+  fontSize: 16,
+});
+
+const head_text = style({
+  fontFamily: wantedSans,
+  color: "#111D27",
+  fontWeight: 700,
+});
+
+export const header = style([
+  head_text,
+  {
+    fontWeight: 900,
+    fontSize: "3rem",
+    margin: "40px 80px",
+    "@media": {
+      "screen and (max-width: 1000px)": {
+        fontSize: "2rem",
+        fontWeight: 800,
+        margin: "20px 40px",
+      },
+    },
+  },
+]);
+
 export const background = style({
   width: "100%",
   height: "100vh",
-  background: "linear-gradient(45deg, #1A4369, #255E93, #0B2B49)",
+  background:
+    "radial-gradient(farthest-corner at 40px 40px, #DFFBEE, #D0DDF6, #FDF0F4, #CEF6F7)",
   backgroundSize: "cover",
   position: "absolute",
   top: 0,
@@ -32,20 +93,23 @@ export const delete_txt = style({
   fontSize: 12,
 });
 
-export const hover_box = style({
-  width: 40,
-  height: 40,
-  padding: 0,
-  margin: 0,
-  display: "inline-flex",
-  borderRight: "1px solid #E0EFF3",
-  borderBottom: "1px solid #E0EFF3",
-  transition: "opacity 1s ease-in-out",
-  ":hover": {
-    background: "#E0EFF3",
-    opacity: 1,
+export const hover_box = style([
+  responsive,
+  {
+    width: 40,
+    height: 40,
+    padding: 0,
+    margin: 0,
+    display: "inline-flex",
+    borderRight: "1px solid #E0EFF3",
+    borderBottom: "1px solid #E0EFF3",
+    transition: "opacity 1s ease-in-out",
+    ":hover": {
+      background: "#E0EFF3",
+      opacity: 1,
+    },
   },
-});
+]);
 
 export const description_box = style({
   width: "80%",
@@ -77,6 +141,14 @@ export const container = style({
   transform: "translateX(-50%)",
   fontFamily: wantedSans,
   maxWidth: 1000,
+  "@media": {
+    "screen and (max-width: 1000px)": {
+      width: "100%",
+      display: "block",
+      border: "none",
+      backdropFilter: "none",
+    },
+  },
 });
 
 export const click_link = style({
@@ -155,3 +227,54 @@ export const footer = style({
   color: "#ffffff99",
   zIndex: 100,
 });
+
+export const main_section_container = style([
+  responsive,
+  {
+    width: 1000,
+    margin: "80px auto 40px",
+    display: "flex",
+    // justifyContent: "space-between",
+    justifyContent: "center",
+    flexWrap: "nowrap",
+    gap: 20,
+  },
+]);
+
+export const item_container = style({
+  width: 300,
+  border: "1px solid #ffffff99",
+  backdropFilter: "blur(20px)",
+  padding: 20,
+  marginBottom: 20,
+  borderRadius: 12,
+  background: "#ffffff44",
+  display: "flex",
+  flexDirection: "column",
+
+  transition: "all 500ms",
+  ":hover": {
+    background: "#ffffffcc",
+  },
+});
+
+export const item_container_h3 = style({
+  selectors: {
+    [`${item_container} > &`]: {
+      color: "#111D27cc",
+      fontFamily: wantedSans,
+      fontWeight: 700,
+      margin: "0 0 32px 0",
+      fontSize: "1.5rem",
+    },
+  },
+});
+
+export const link_text = style([
+  plain_text,
+  {
+    fontWeight: 600,
+    textAlign: "center",
+    fontSize: "1.2rem",
+  },
+]);
