@@ -11,38 +11,42 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
           docker build --no-cache -t to_mp3 .
-          docker tag to_mp3:latest ${{ secrets.EC2_DOCKER_IMAGE_NAME }}
-          docker push ${{ secrets.EC2_DOCKER_IMAGE_NAME }}
+          docker save to_mp3 > to_mp3.tar
 
-      - name: Install SSH Key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy Docker image to EC2
+      - name: Add SSH key
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            echo "===> Stopping running containers..."
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
+
+      - name: Copy image to EC2
+        run: |
+          scp to_mp3.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_INSTANCE_IP }}:/home/${{ secrets.EC2_USER }}/to_mp3.tar
+
+      - name: Deploy Docker image on EC2
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
+            echo "===> Stopping existing container..."
             docker ps -q | xargs -r docker stop
 
-            echo "===> Removing unused Docker objects (images, containers, volumes)..."
-            docker system prune -af
+            echo "===> Removing old Docker image..."
+            docker image prune -af
 
-            echo "===> Pulling latest Docker image..."
-            docker pull ${{ secrets.EC2_DOCKER_IMAGE_NAME }}
+            echo "===> Loading new image from tar..."
+            docker load < ~/to_mp3.tar
 
-            echo "===> Running container..."
-            docker run -d -p 80:80 ${{ secrets.EC2_DOCKER_IMAGE_NAME }}
+            echo "===> Stopping and removing any existing container..."
+            docker rm -f to_mp3_container || true
 
+            echo "===> Running new container..."
+            docker run -d --name to_mp3_container -p 80:80 to_mp3
           EOF
