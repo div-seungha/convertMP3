@@ -13,40 +13,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image
-        run: |
-          docker build --no-cache -t to_mp3 .
-          docker save to_mp3 > to_mp3.tar
-
-      - name: Add SSH key
+      - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_INSTANCE_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Build Docker image and save to tar
+        run: |
+          docker build -t to_mp3 .
+          docker save to_mp3 > to_mp3.tar
 
       - name: Copy image to EC2
         run: |
-          scp to_mp3.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_INSTANCE_IP }}:/home/${{ secrets.EC2_USER }}/to_mp3.tar
+          scp to_mp3.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/to_mp3.tar
 
-      - name: Deploy Docker image on EC2
+      - name: Deploy on EC2
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_INSTANCE_IP }} << 'EOF'
-            echo "===> Stopping existing container..."
-            docker ps -q | xargs -r docker stop
-
-            echo "===> Removing old Docker image..."
-            docker image prune -af
-
-            echo "===> Loading new image from tar..."
-            docker load < ~/to_mp3.tar
-
-            echo "===> Stopping and removing any existing container..."
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            # Stop and remove old container
             docker rm -f to_mp3_container || true
 
-            echo "===> Running new container..."
+            # Load new image
+            docker load < ~/to_mp3.tar
+
+            # Run container (adjust ports if needed)
             docker run -d --name to_mp3_container -p 80:3000 to_mp3
           EOF
