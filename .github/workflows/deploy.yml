@@ -1,4 +1,4 @@
-name: Deploy Docker Image to EC2
+name: Deploy via SSH and Docker Build on EC2
 
 on:
   push:
@@ -20,24 +20,22 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Build Docker image and save to tar
+      - name: Copy source code to EC2
         run: |
-          docker build -t to_mp3 .
-          docker save to_mp3 > to_mp3.tar
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "rm -rf ~/app && mkdir ~/app"
+          scp -r ./* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/app
 
-      - name: Copy image to EC2
-        run: |
-          scp to_mp3.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/to_mp3.tar
-
-      - name: Deploy on EC2
+      - name: Build and deploy Docker container on EC2
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            # Stop and remove old container
+            cd ~/app
+
+            echo "🧹 Stopping and removing existing container (if any)..."
             docker rm -f to_mp3_container || true
 
-            # Load new image
-            docker load < ~/to_mp3.tar
+            echo "🐳 Building Docker image..."
+            docker build -t to_mp3 .
 
-            # Run container (adjust ports if needed)
+            echo "🚀 Running container..."
             docker run -d --name to_mp3_container -p 80:3000 to_mp3
           EOF
