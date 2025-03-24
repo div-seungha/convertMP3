@@ -10,27 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. 코드 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
+      # 2. SSH 접속 준비
+      - name: Set up SSH access
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      # 3. 코드 EC2로 복사
       - name: Copy source code to EC2
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "rm -rf ~/app && mkdir ~/app"
           scp -r ./* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/app
 
-      - name: Build and deploy Docker container on EC2
+      # 4. EC2에서 Docker 빌드 및 배포 실행
+      - name: Build and deploy on EC2
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e
             cd ~/app
 
-            echo "🧹 Stopping and removing existing container (if any)..."
+            echo "🧹 Removing old container if exists..."
             docker rm -f to_mp3_container || true
 
             echo "🐳 Building Docker image..."
