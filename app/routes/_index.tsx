@@ -1,25 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import Background from "../components/Background";
-import { AiOutlineLoading } from "react-icons/ai";
 import {
-  container,
-  delete_txt,
-  description_box,
-  download_button,
   footer,
-  input,
-  input_box,
-  loading,
-  click_link,
-  item_container,
-  main_section_container,
-  item_container_h3,
   background,
-  header,
+  main_section_container,
+  item_container,
+  item_container_h3,
   link_text,
-  plain_text,
 } from "../components/styles.css";
-import Title from "../components/Title";
 
 export default function Index() {
   return (
