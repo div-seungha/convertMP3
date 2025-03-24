@@ -42,5 +42,5 @@ jobs:
             docker build -t to_mp3 .
 
             echo "🚀 Running container..."
-            docker run -d --name to_mp3_container -p 3000:3000 to_mp3
+            docker run -d --name to_mp3_container -p 3000 to_mp3
           EOF
